@@ -21,3 +21,30 @@
 (fact "Is time ?" (is-time? "00:00:35,769 --> 00:00:37,964") => true)
 (fact "It's not a time" (is-time? "no time") => false)
 (fact "It's not a time" (is-time? "") => false)
+
+
+(fact "Split times" (extract-times-from-line "00:00:35,769 --> 00:00:37,964") => ["00:00:35,769" "00:00:37,964"])
+
+(def input ["1"
+            "00:00:35,769 --> 00:00:37,964"
+            "Text"
+            ""])
+
+(def expected-lines ["1"
+               "00:00:36,769 --> 00:00:38,964"
+               "Text"
+               ""])
+
+
+(fact "Synchronize line with time"
+  (sync-line "00:00:35,769 --> 00:00:37,964" 1000) => "00:00:36,769 --> 00:00:38,964")
+
+(fact "When line is not time sync-line should returns the line"
+  (sync-line "Text" 1000) => "Text")
+
+
+;;Delete file after
+(with-state-changes [(after :facts (clojure.java.io/delete-file "resources/sub.srt.out"))]
+  (fact "Check sync file is created"
+    (do (sync-file "resources/sub.srt" 1000)
+        (slurp "resources/sub.srt.out")) => not-empty))
