@@ -21,9 +21,9 @@
 (defn update-line
   [line millis]
   (let [[start end] (extract-times-from-line line)]
-    (str (clojure.string/replace (add-millis start 1000) "." ",")
+    (str (clojure.string/replace (add-millis start millis) "." ",")
          " --> "
-         (clojure.string/replace (add-millis end 1000) "." ","))))
+         (clojure.string/replace (add-millis end millis) "." ","))))
 
 (defn sync-line
   [line millis]
