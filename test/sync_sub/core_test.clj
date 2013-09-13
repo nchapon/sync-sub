@@ -7,10 +7,6 @@
 
 (fact "Add millis" (add-millis "01:05:12,598" 1000) => (LocalTime. 1 5 13 598))
 
-(fact "Read file into vector"
-  (get-lines "resources/sub.srt") => not-empty)
-
-
 (fact "Convert string to LocalTime"
   (convert-to-time "00:09:53,678") => (LocalTime. 0 9 53 678))
 
@@ -25,15 +21,6 @@
 
 (fact "Split times" (extract-times-from-line "00:00:35,769 --> 00:00:37,964") => ["00:00:35,769" "00:00:37,964"])
 
-(def input ["1"
-            "00:00:35,769 --> 00:00:37,964"
-            "Text"
-            ""])
-
-(def expected-lines ["1"
-               "00:00:36,769 --> 00:00:38,964"
-               "Text"
-               ""])
 
 
 (fact "Synchronize line with time"
@@ -43,8 +30,24 @@
   (sync-line "Text" 1000) => "Text")
 
 
-;;Delete file after
-(with-state-changes [(after :facts (clojure.java.io/delete-file "resources/sub.srt.out"))]
-  (fact "Check sync file is created"
-    (do (sync-file "resources/sub.srt" 1000)
-        (slurp "resources/sub.srt.out")) => not-empty))
+(defn content-of [values]
+  (apply str (interpose "\n" values)))
+
+(def input (content-of ["1"
+                   "00:00:35,769 --> 00:00:37,964"
+                   "Text"
+                   ""]))
+
+(def expected-output (content-of ["1"
+                             "00:00:36,769 --> 00:00:38,964"
+                             "Text"
+                             ""]))
+
+;; Create an input files
+;; Delete created files after
+(with-state-changes [(before :facts (spit "resources/input.srt" input))
+                     (after :facts (do (clojure.java.io/delete-file "resources/input.srt.out")
+                                       (clojure.java.io/delete-file "resources/input.srt")))]
+  (fact "Verify sync file is well created"
+    (do (sync-file "resources/input.srt" 1000)
+        (slurp "resources/input.srt.out")) => expected-output))

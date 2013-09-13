@@ -41,9 +41,6 @@
 ;;       (recur (conj output (sync-line-with-time (first work-todo) 1000))
 ;;              (rest work-todo)))))
 
-
-
-
 (defn get-lines [filename]
   (with-open [rdr (clojure.java.io/reader filename)]
                                (reduce conj [] (line-seq rdr))))
