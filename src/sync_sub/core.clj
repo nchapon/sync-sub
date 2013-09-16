@@ -46,7 +46,7 @@
                                (reduce conj [] (line-seq rdr))))
 
 (defn sync-file [filename millis]
-  (with-open [rdr (clojure.java.io/reader filename)
+  (with-open [rdr (clojure.java.io/reader filename :encoding "ISO-8859-1")
               wrt (clojure.java.io/writer (str filename ".out"))]
     (doseq [line (line-seq rdr)]
       (.write wrt (str (sync-line line millis) "\n")))))
