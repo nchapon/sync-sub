@@ -1,14 +1,24 @@
 (ns sync-sub.cmdline
-  (:use [sync-sub.core])
+  (:use [sync-sub.core]
+        [clojure.tools.cli :only [cli]])
   (:gen-class))
 
 
 
 
-;; Need to use https://github.com/clojure/tools.cli to check args
 (defn -main
   "Main method"
   [& args]
-  (let [[input-filename time] args]
-    (sync-file input-filename (Integer/parseInt time))
-    (println "Subs synchronized finished.")))
+  (let [[opts args banner] (cli args
+                                "Subtitle Synchronisation Tool Usage"
+                                ["-h" "--help" :flag true :default false]
+                                ["-f" "--input-file" "Subtitle input filename"]
+                                ["-s" "--sync-time" "Synchronization time in millis" :parse-fn #(Integer/parseInt %)])]
+    (when (:help opts)
+      (println banner)
+      (System/exit 0))
+    (if (and
+         (:input-file opts)
+         (:sync-time opts))
+      (sync-file (:input-file opts) (:sync-time opts))
+      (println banner))))

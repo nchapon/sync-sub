@@ -32,14 +32,6 @@
    :else line))
 
 
-;; (defn sync-lines
-;;   [lines millis]
-;;   (loop [output []
-;;         work-todo lines]
-;;     (if (empty? work-todo)
-;;       output
-;;       (recur (conj output (sync-line-with-time (first work-todo) 1000))
-;;              (rest work-todo)))))
 
 (defn get-lines [filename]
   (with-open [rdr (clojure.java.io/reader filename)]

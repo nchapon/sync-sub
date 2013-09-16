@@ -5,5 +5,6 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [joda-time/joda-time "2.1"]
+                 [org.clojure/tools.cli "0.2.4"]
                  [midje "1.5.1"]]
   :main sync-sub.cmdline)
