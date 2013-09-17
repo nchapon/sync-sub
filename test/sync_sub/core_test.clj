@@ -7,6 +7,8 @@
 
 (fact "Add millis" (add-millis "01:05:12,598" 1000) => (LocalTime. 1 5 13 598))
 
+(fact "Add millis" (add-millis "01:05:12,598" -1000) => (LocalTime. 1 5 11 598))
+
 (fact "Convert string to LocalTime"
   (convert-to-time "00:09:53,678") => (LocalTime. 0 9 53 678))
 
