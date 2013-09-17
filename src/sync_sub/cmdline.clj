@@ -10,9 +10,10 @@
   "Main method"
   [& args]
   (let [[opts args banner] (cli args
-                                "Subtitle Synchronisation Tool Usage"
+                                "Subtitle Synchronization Tool Usage"
                                 ["-h" "--help" :flag true :default false]
                                 ["-f" "--input-file" "Subtitle input filename"]
+                                ["-e" "--encoding-file" "Encoding file" :default "ISO-8859-1"]
                                 ["-s" "--sync-time" "Synchronization time in millis" :parse-fn #(Integer/parseInt %)])]
     (when (:help opts)
       (println banner)
@@ -20,5 +21,5 @@
     (if (and
          (:input-file opts)
          (:sync-time opts))
-      (sync-file (:input-file opts) (:sync-time opts))
+      (sync-file (:input-file opts) (:sync-time opts) (:encoding-file opts))
       (println banner))))

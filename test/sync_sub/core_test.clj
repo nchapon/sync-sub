@@ -49,5 +49,5 @@
                      (after :facts (do (clojure.java.io/delete-file "resources/input.srt.out")
                                        (clojure.java.io/delete-file "resources/input.srt")))]
   (fact "Verify sync file is well created"
-    (do (sync-file "resources/input.srt" 1000)
+    (do (sync-file "resources/input.srt" 1000 "ISO-8859-1")
         (slurp "resources/input.srt.out")) => expected-output))
